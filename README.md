@@ -58,11 +58,11 @@ https://ngrok.com/
 
 <br>
 
-### 2. tools 추가
+### 3) tools 추가
 
 <br>
 
-### 3. jenkins-github 연동 확인
+### 4) jenkins-github 연동 확인
 **1. jenkins 접속하여 Dashboard → 새로운 item** <br>
 **2. Pipeline 선택**
 ![Image](https://github.com/user-attachments/assets/a2a7119e-65ba-4baf-aca6-db03b611c145)
@@ -111,8 +111,50 @@ https://ngrok.com/
 <br>
 <br>
 
+### 2. github  jar 파일 build하기
+**1. 현재 깃허브에 올라간 파일 목록**
+   ![Image](https://github.com/user-attachments/assets/03dc3e40-029d-44a5-aa74-85f7113fea55)
+   - 위 파일 중 **gradlew**를 빌드해야 함
+   
+**2. Configure → Pipeline → Script 수정**
+   ```
+   pipeline {
+      agent any
+
+      stages {
+          stage('Clone Repository') {
+              steps {
+                  git branch: 'main', url: 'https://github.com/ssoyeonni/20250324a.git'
+              }
+          }          
+          stage('Build') {
+              steps {
+                  dir('./step07_CICD') {                   
+                     sh 'chmod +x gradlew'    
+					  		     sh './gradlew build'
+                  }
+              }
+          }               
+      }
+      post {
+          success {
+              echo '빌드 성공'
+          }
+          failure {
+              echo '빌드 실패'
+          }
+      }
+   }
+
+   ```
+
+3. Workspace/step07_CICD/build/libs/ 에서 build 된 jar 파일 확인
+   ![Image](https://github.com/user-attachments/assets/51f40088-535a-4320-b217-fc80fdffc523)
 
 
+<br>
+<br>
+<br>
 
 ## docker Jenkins - Local Ubuntu bind-mount
 - ubuntu server /home/ubuntu/jarappdir - jenkins docker server /var/jenkins_home/jarappdir bind mount
