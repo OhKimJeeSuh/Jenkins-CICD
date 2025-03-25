@@ -1,11 +1,25 @@
-# Jenkins-CICD
+# ♾️Jenkins-CICD
 <br>
 
-## 1. 개요
+### 📋 목차
+1. [📝 개요](1--개요)
+2. [🔧 CI/CD를 위한 준비 사항](#2--cicd를-위한-준비-사항)
+   - [🔗 Jenkins - GitHub 연동](#-1-jenkins---github-연동)
+      - ngrok 설치 및 설정
+      - Webhook 등록
+      - tools 추가
+      - jenkins-github 연동 확인
+   - [🏗️ github jar 파일 build하기](#2-%EF%B8%8F-github--jar-파일-build하기)
+3. [🗂️ docker Jenkins - 내부 Ubuntu bind-mount](#3-%EF%B8%8F-docker-jenkins---내부-ubuntu-bind-mount)
+4. [🌐 docker Jenkins - 외부 Ubuntu 통신](#4--docker-jenkins---외부-ubuntu-통신)
+5. [🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기](#5--inotifywait를-이용하여-자동으로-jar-파일-실행하기)
+6. [💥 트러블슈팅](#-트러블-슈팅)
+
+## 1. 📝 개요
 <br>
 
-## 2. CI/CD를 위한 준비 사항
-### 1. jenkins - github 연동
+## 2. 🔧 CI/CD를 위한 준비 사항
+### 🔗 1. jenkins - github 연동
 > **ngrok** : webhook시 GitHub가 Jenkins에 HTTP POST 요청을 보내야 하는데, 현재 jenkins가 private IP를 가지므로 ngrok 사용 해야한다.
 > <br><br>
 > **webhook** : Jenkins와 GitHub를 연동하여 코드 수정 시 Jenkins로 자동 빌드 흐름을 만들기 위해 webhook 설정이 필요하다.
@@ -112,7 +126,7 @@ https://ngrok.com/
 <br>
 <br>
 
-### 2. github  jar 파일 build하기
+### 2. 🏗️ github  jar 파일 build하기
 **1. 현재 깃허브에 올라간 파일 목록**
    ![Image](https://github.com/user-attachments/assets/03dc3e40-029d-44a5-aa74-85f7113fea55)
    - 위 파일 중 **gradlew**를 빌드해야 함
@@ -157,7 +171,7 @@ https://ngrok.com/
 <br>
 <br>
 
-## 3. docker Jenkins - 내부 Ubuntu bind-mount
+## 3. 🗂️ docker Jenkins - 내부 Ubuntu bind-mount
 - git push가 이루어졌을 때 jenkins에서 자동으로 감지 후, build 하여 bind mount로 복사 -> 로컬 ubuntu에서 파일 확인 가능
 
 ### 1. 도커 실행 명령어
@@ -207,7 +221,7 @@ Jenkins Docker에서 빌드 한 jar 파일, Ubuntu Host 공유 폴더로 공유 
 
 <img width="444" alt="image" src="https://github.com/user-attachments/assets/eb941f8d-5c37-41ac-9ed2-581c6943be3e" />
 
-## 4. docker Jenkins - 외부 Ubuntu 통신
+## 4. 🌐 docker Jenkins - 외부 Ubuntu 통신
 
 ### 1. docker Jenkins 서버 정보
 - ip : 172.17.0.2
@@ -280,7 +294,7 @@ pipeline {
 <br>
 <img width="785" alt="image-8" src="https://github.com/user-attachments/assets/5326c60c-80f1-4500-8c80-81b49c4c69be" />
 
-## 5. 이관 작업 후, inotifywait를 이용하여 자동으로 jar 파일 실행하기
+## 5. 🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기
 ### 1. inotifywait란?
 - 리눅스 시스템에서 파일이나 디렉토리의 변경 사항을 모니터링하기 위한 간단한 명령줄 도구
 
@@ -358,7 +372,7 @@ done
 
 <br><br>
 
-# 🧨 트러블 슈팅
+# 💥 트러블 슈팅
 
 ## Ⅰ. Jenkins 기반 CICD 서버에서 JAR 실행 오류 해결🚀
 
