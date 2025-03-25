@@ -63,12 +63,13 @@ https://ngrok.com/
 <br>
 
 ### 4) jenkins-github 연동 확인
-**1. jenkins 접속하여 Dashboard → 새로운 item** <br>
+**1. jenkins 접속하여 Dashboard → 새로운 item**
+   
 **2. Pipeline 선택**
-![Image](https://github.com/user-attachments/assets/a2a7119e-65ba-4baf-aca6-db03b611c145)
+   ![Image](https://github.com/user-attachments/assets/a2a7119e-65ba-4baf-aca6-db03b611c145)
 
 **3. Githubhook trigger for GITScm polling 체크**
-![Image](https://github.com/user-attachments/assets/509aaaea-760c-48a6-badb-83fb49580f5f)
+   ![Image](https://github.com/user-attachments/assets/509aaaea-760c-48a6-badb-83fb49580f5f)
 
 **4. script에 해당 webhook 설정한 깃허브 주소 넣기**
 - 만약 branch가 main이면 branch: ‘main’ 명시해줘야함
