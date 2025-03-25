@@ -18,7 +18,7 @@
 8. [💥 트러블슈팅](#-트러블-슈팅)
 
 ## 1. 📝 개요
-이 프로젝트는 Jenkins를 활용하여 CI/CD 파이프라인을 구축한다. GitHub 코드 저장소와 Jenkins를 연동하여 소스 코드를 변경하고 git에 push할 때마다 JAR파일을 빌드하는 자동화 시스템으로, Docker 컨테이너에서 실행되는 Jenkins와 Ubuntu 서버 간의 ssh를 이용한 통신 및 파일 공유 방법과 inotifywait를 이용한 자동 배포 기능을 포함한다.
+이 프로젝트는 Jenkins를 활용하여 CI/CD 파이프라인을 구축한다. GitHub 코드 저장소와 Jenkins를 연동하여 소스 코드를 변경하고 git에 push할 때마다 JAR파일을 빌드하며, Docker 컨테이너에서 실행되는 Jenkins와 Ubuntu 서버 간의 ssh를 이용한 통신 및 파일 공유 기능과 inotifywait를 이용한 배포 기능을 포함한 자동화 시스템이다.
 <br><br>
 
 ## 2. 🎓 팀원소개
