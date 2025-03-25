@@ -1,4 +1,84 @@
 # Jenkins-CICD
+<br>
+
+## 개요
+<br>
+
+## CI/CD를 위한 준비 사항
+### 1. jenkins - github 연동
+> **ngrok** : webhook시 GitHub가 Jenkins에 HTTP POST 요청을 보내야 하는데, 현재 jenkins가 private IP를 가지므로 ngrok 사용 해야한다.
+> <br><br>
+> **webhook** : Jenkins와 GitHub를 연동하여 코드 수정 시 Jenkins로 자동 빌드 흐름을 만들기 위해 webhook 설정이 필요하다.
+
+<br>
+
+### 1) ngrok
+1. ngrok 다운로드
+https://ngrok.com/
+
+- Getting Started → Setup & Installation
+- 사이트에 로그인하여 Windows용 다운로드<br>
+![Image](https://github.com/user-attachments/assets/250a87a5-738a-453a-9b58-de4714c1b415)
+
+<br>
+
+- Getting Started → Your Authtoken
+- 토큰 발급받기
+- Command Line 복사
+![Image](https://github.com/user-attachments/assets/c511e507-50ef-4567-97a4-de7835491dab)
+<br>
+
+2. ngrok 실행 후 복사한 Command Line 붙여넣기
+![Image](https://github.com/user-attachments/assets/38ee159a-99d6-46b1-97a0-e279a5fea123)
+
+
+- C:\Users\사용자이름\AppData\Local\ngrok 폴더에 yml 파일 생성 확인
+  ![Image](https://github.com/user-attachments/assets/8c7f0b66-e638-401b-9b0b-d1be4db57121)
+
+<br>
+
+- PowerShell 관리자 모드에서 .\ngrok http http://ip:Jenkins_port로 실행
+```
+.\ngrok http http://localhost:8080
+```
+
+- 노란 박스 부분 복사
+![Image](https://github.com/user-attachments/assets/6ee49a52-2464-4a5e-9f94-628a14562fef)
+
+
+### 2) webhook
+1. 깃허브에 webhook 설정
+- 연동할 github Repository에서 Settings → Webhooks → Add webhook
+![Image](https://github.com/user-attachments/assets/92f260eb-92e2-4ca5-a6a4-32cd4dd7f338)
+
+- Payload URL에 ngrok에서 복사한 주소와 그 뒤에 /github-webhook/ 넣기
+  ![Image](https://github.com/user-attachments/assets/67ebcf02-e631-4fac-9121-1334a7a5a6ca)
+  ![Image](https://github.com/user-attachments/assets/a850a8c2-eb21-41c6-a387-5e5915b381e9)
+  ![Image](https://github.com/user-attachments/assets/688bd3ca-5488-41fd-ba8b-c4a648c577d8)
+
+<br>
+
+### 2. tools 추가
+
+<br>
+
+### 3. jenkins-github 연동 확인
+1. jenkins 접속하여 Dashboard → 새로운 item
+2. Pipeline 선택
+![Image](https://github.com/user-attachments/assets/a2a7119e-65ba-4baf-aca6-db03b611c145)
+
+3. Githubhook trigger for GITScm polling 체크
+![Image](https://github.com/user-attachments/assets/509aaaea-760c-48a6-badb-83fb49580f5f)
+
+4. script에 해당 webhook 설정한 깃허브 주소 넣기
+- 만약 branch가 main이면 branch: ‘main’ 명시해줘야함
+- 제대로 pull 받아 왔는지 확인하기 위해 ls 추가
+  ![Image](https://github.com/user-attachments/assets/0d00a027-a5c2-405f-9e13-d34d1c28da2a)
+  ```
+  
+
+
+
 
 
 ## docker Jenkins - Local Ubuntu bind-mount
