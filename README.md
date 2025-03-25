@@ -1,24 +1,50 @@
-# ♾️Jenkins-CICD
+# ♾️Jenkins-CICD 자동화 파이프라인 구축
 <br>
 
 ### 📋 목차
-1. [📝 개요](1--개요)
-2. [🔧 CI/CD를 위한 준비 사항](#2--cicd를-위한-준비-사항)
+1. [📝 개요](#1--개요)
+2. [🎓 팀원소개](#2--팀원소개)
+3. [🛠 기술 스택](#3--기술-스택)
+4. [🔧 CI/CD를 위한 준비 사항](#4--cicd를-위한-준비-사항)
    - [🔗 Jenkins - GitHub 연동](#-1-jenkins---github-연동)
       - ngrok 설치 및 설정
       - Webhook 등록
       - tools 추가
       - jenkins-github 연동 확인
    - [🏗️ github jar 파일 build하기](#2-%EF%B8%8F-github--jar-파일-build하기)
-3. [🗂️ docker Jenkins - 내부 Ubuntu bind-mount](#3-%EF%B8%8F-docker-jenkins---내부-ubuntu-bind-mount)
-4. [🌐 docker Jenkins - 외부 Ubuntu 통신](#4--docker-jenkins---외부-ubuntu-통신)
-5. [🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기](#5--inotifywait를-이용하여-자동으로-jar-파일-실행하기)
-6. [💥 트러블슈팅](#-트러블-슈팅)
+5. [🗂️ docker Jenkins - 내부 Ubuntu bind-mount](#5-%EF%B8%8F-docker-jenkins---내부-ubuntu-bind-mount)
+6. [🌐 docker Jenkins - 외부 Ubuntu 통신](#6--docker-jenkins---외부-ubuntu-통신)
+7. [🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기](#7--inotifywait를-이용하여-자동으로-jar-파일-실행하기)
+8. [💥 트러블슈팅](#-트러블-슈팅)
 
 ## 1. 📝 개요
 <br>
+이 프로젝트는 Jenkins를 활용하여 CI/CD 파이프라인을 구축하는 과정을 설명합니다. GitHub 코드 저장소와 Jenkins를 연동하여 소스 코드가 변경될 때마다 자동으로 빌드, 테스트 및 배포를 수행하는 자동화 시스템을 구현했습니다. Docker 컨테이너에서 실행되는 Jenkins와 Ubuntu 서버 간의 통신 및 파일 공유 방법, 그리고 inotifywait를 이용한 자동 배포 기능까지 포함됩니다.
+<br> <br>
 
-## 2. 🔧 CI/CD를 위한 준비 사항
+## 2. 🎓 팀원소개
+
+|<img src="https://avatars.githubusercontent.com/u/114637614?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/165532198?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/193404366?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/79669001?v=4" width="150" height="150"/>|
+|:-:|:-:|:-:|:-:|
+|오현두<br/>[@HyunDooBoo](https://github.com/HyunDooBoo)|김소연<br/>[@ssoyeonni](https://github.com/ssoyeonni)|지수근<br/>[@SuGeunJee](https://github.com/SuGeunJee)|서소원<br/>[@PleaseErwin](https://github.com/PleaseErwin)|
+
+<br><br>
+
+
+## 3. 🛠 기술 스택
+
+| 기술               | 도구                |
+|--------------------|-------------------------|
+| **버전 관리**    | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)         |
+| **CI/CD 도구**    | ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)     |
+| **컨테이너** | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)             |
+| **빌드 도구** | ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)            |
+| **배포 환경** | ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)            |
+| **네트워크 터널링** | ![ngrok](https://img.shields.io/badge/ngrok-1F1E37?style=for-the-badge&logo=ngrok&logoColor=white)         |
+
+<br><br>
+
+## 4. 🔧 CI/CD를 위한 준비 사항
 ### 🔗 1. jenkins - github 연동
 > **ngrok** : webhook시 GitHub가 Jenkins에 HTTP POST 요청을 보내야 하는데, 현재 jenkins가 private IP를 가지므로 ngrok 사용 해야한다.
 > <br><br>
@@ -171,7 +197,7 @@ https://ngrok.com/
 <br>
 <br>
 
-## 3. 🗂️ docker Jenkins - 내부 Ubuntu bind-mount
+## 5. 🗂️ docker Jenkins - 내부 Ubuntu bind-mount
 - git push가 이루어졌을 때 jenkins에서 자동으로 감지 후, build 하여 bind mount로 복사 -> 로컬 ubuntu에서 파일 확인 가능
 
 ### 1. 도커 실행 명령어
@@ -221,7 +247,7 @@ Jenkins Docker에서 빌드 한 jar 파일, Ubuntu Host 공유 폴더로 공유 
 
 <img width="444" alt="image" src="https://github.com/user-attachments/assets/eb941f8d-5c37-41ac-9ed2-581c6943be3e" />
 
-## 4. 🌐 docker Jenkins - 외부 Ubuntu 통신
+## 6. 🌐 docker Jenkins - 외부 Ubuntu 통신
 
 ### 1. docker Jenkins 서버 정보
 - ip : 172.17.0.2
@@ -294,7 +320,7 @@ pipeline {
 <br>
 <img width="785" alt="image-8" src="https://github.com/user-attachments/assets/5326c60c-80f1-4500-8c80-81b49c4c69be" />
 
-## 5. 🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기
+## 7. 🔄 inotifywait를 이용하여 자동으로 jar 파일 실행하기
 ### 1. inotifywait란?
 - 리눅스 시스템에서 파일이나 디렉토리의 변경 사항을 모니터링하기 위한 간단한 명령줄 도구
 
