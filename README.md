@@ -1,10 +1,10 @@
 # Jenkins-CICD
 <br>
 
-## 개요
+## 1. 개요
 <br>
 
-## CI/CD를 위한 준비 사항
+## 2. CI/CD를 위한 준비 사항
 ### 1. jenkins - github 연동
 > **ngrok** : webhook시 GitHub가 Jenkins에 HTTP POST 요청을 보내야 하는데, 현재 jenkins가 private IP를 가지므로 ngrok 사용 해야한다.
 > <br><br>
@@ -157,14 +157,14 @@ https://ngrok.com/
 <br>
 <br>
 
-## docker Jenkins - Local Ubuntu bind-mount
-- ubuntu server /home/ubuntu/jarappdir - jenkins docker server /var/jenkins_home/jarappdir bind mount
+## 3. docker Jenkins - 내부 Ubuntu bind-mount
 - git push가 이루어졌을 때 jenkins에서 자동으로 감지 후, build 하여 bind mount로 복사 -> 로컬 ubuntu에서 파일 확인 가능
 
-### 도커 실행 명령어
-`$ docker run -d --name jenkins-new -v /home/ubuntu/jarappdir:/var/jenkins_home/jarappdir -p 8088:8080 jenkins-backup`
+### 1. 도커 실행 명령어
+`$ docker run -d --name jenkins-new -v /home/ubuntu/jarappdir:/var/jenkins_home/jarappdir -p 8088:8080 jenkins-backup` <br><br>
+ubuntu 서버의 /home/ubuntu/jarappdir 과 jenkins docker 서버의 /var/jenkins_home/jarappdir를 bind mount 한다.
 
-### Jenkins Script
+### 2. Jenkins Script - bind mount된 폴더로 jar 파일 복사
 ```bash
 pipeline {
     agent any
@@ -202,41 +202,42 @@ pipeline {
 }
 ```
 
-### 결과
-Jenkins Docker에서 빌드 한 jar 파일, Ubuntu Host 공유 폴더로 공유 성공!!
+### 3. 결과
+Jenkins Docker에서 빌드 한 jar 파일, Ubuntu Host 공유 폴더로 공유 성공!! <br>
 
-![alt text](image-3.png)
+<img width="444" alt="image" src="https://github.com/user-attachments/assets/eb941f8d-5c37-41ac-9ed2-581c6943be3e" />
 
-## docker Jenkins - 외부 Ubuntu 통신
+## 4. docker Jenkins - 외부 Ubuntu 통신
 
-### docker Jenkins 서버 정보
+### 1. docker Jenkins 서버 정보
 - ip : 172.17.0.2
 - id : jenkins
 
-### 외부 Ubuntu 서버 정보
+### 2. 외부 Ubuntu 서버 정보
 - ip : 192.168.0.13
 - id : ubuntu
 
-### SSH, SCP 통신을 위한 인증 설정
-현재 아래와 같은 스크립트를 Jenkins에서 실행시키면, build 오류가 발생한다.
-그 이유는 ssh Public key가 공유되어 있지 않기 때문이다.
+### 3. SSH, SCP 통신을 위한 인증 설정
+현재 아래와 같은 스크립트를 Jenkins에서 실행시키면, build 오류가 발생한다. <br>
+그 이유는 ssh Public key가 공유되어 있지 않기 때문이다. <br>
 
 `Host key verification failed.`
 
-따라서, docker jenkins server에서 ssh-key를 생성한 후, public key를 외부 Ubuntu server에 공유를 해주면 된다!
+따라서, docker jenkins server에서 ssh-key를 생성한 후, public key를 외부 Ubuntu server에 공유를 해주면 된다! <br>
 
-### ssh key 생성
-`ssh-keygen -t rsa -b 4096`
-![alt text](image-6.png)
+### 4. ssh key 생성
+`ssh-keygen -t rsa -b 4096` <br> <br>
+<img width="476" alt="image-6" src="https://github.com/user-attachments/assets/532ae3cb-5559-4408-984a-401e3225aac6" />
 
-### ssh public key를 공유
-`ssh-copy-id <공유할 서버의 이름>@<공유할 서버의 ip>`
-![alt text](image-5.png)
 
-### 비밀번호를 물어보지 않고, SSH 성공 테스트
-![alt text](image-7.png)
+### 5. ssh public key를 공유
+`ssh-copy-id <공유할 서버의 이름>@<공유할 서버의 ip>` <br> <br>
+<img width="704" alt="image-5" src="https://github.com/user-attachments/assets/943476c5-1023-45dc-95d3-31b3b8112af9" />
 
-### Jenkins Script 실행
+### 6. 비밀번호를 물어보지 않고, SSH 성공 테스트
+<img width="482" alt="image-7" src="https://github.com/user-attachments/assets/b93292e3-1f15-4817-8cf5-c667d1799de8" />
+
+### 7. Jenkins Script - 외부 Ubuntu로 scp 통신
 ```bash
 pipeline {
     agent any
@@ -275,14 +276,15 @@ pipeline {
     
 }
 ```
-### jenkins에서 빌드된 jar 파일 외부 ubuntu에 이관 성공!!
-![alt text](image-8.png)
+### 8. jenkins에서 빌드된 jar 파일 외부 ubuntu에 이관 성공!!
+<br>
+<img width="785" alt="image-8" src="https://github.com/user-attachments/assets/5326c60c-80f1-4500-8c80-81b49c4c69be" />
 
-## 이관 작업 후, inotifywait를 이용하여 자동으로 jar 파일 실행하기
-### inotifywait란?
+## 5. 이관 작업 후, inotifywait를 이용하여 자동으로 jar 파일 실행하기
+### 1. inotifywait란?
 - 리눅스 시스템에서 파일이나 디렉토리의 변경 사항을 모니터링하기 위한 간단한 명령줄 도구
 
-이관해준 jarappdir 폴더를 감지하다가 변화가 생기면 현재 실행되고 있는 jar파일을 kill 하고, 새로운 jar 파일을 실행하는 스크립트
+이관해준 jarappdir 폴더를 감지하다가 변화가 생기면 현재 실행되고 있는 jar파일을 kill 하고, 새로운 jar 파일을 실행하는 스크립트 <br>
 이관된 서버에서 실행!
 
 ```bash
@@ -340,16 +342,15 @@ while true; do
 done
 ```
 
-### 실행 결과
-- 첫 번째 실행 결과
-![alt text](<화면 캡처 2025-03-25 122228.png>)
+### 2. 실행 결과
+- 첫 번째 실행 결과 <br>
+<img width="1104" alt="화면 캡처 2025-03-25 122228" src="https://github.com/user-attachments/assets/480a618b-87b9-4ee8-bf73-e200ea00bf3a" />
 
-- git push로 인한 jenkins 감지 ci - cd 결과
-![alt text](<화면 캡처 2025-03-25 122429.png>)
+- git push로 인한 jenkins 감지 ci - cd 결과 <br>
+<img width="1100" alt="화면 캡처 2025-03-25 122429" src="https://github.com/user-attachments/assets/a5dd85d3-7991-4233-bf1a-c4c0318a898e" />
 
-### 한계점
-현재 이 스크립트는 기존의 jar를 kill 하고, 새로운 jar를 실행하는 시점에서 잠깐의 down time이 발생한다.
+## 3. 한계점
+현재 이 스크립트는 기존의 jar를 kill 하고, 새로운 jar를 실행하는 시점에서 잠깐의 down time이 발생한다. <br>
+즉, 무중단 배포는 아님!! <br>
 
-즉, 무중단 배포는 아님!!
-
-![alt text](image-9.png)
+<img width="785" alt="image-9" src="https://github.com/user-attachments/assets/77448545-7969-407c-a36e-afd4d40c6365" />
