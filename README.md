@@ -354,3 +354,67 @@ done
 즉, 무중단 배포는 아님!! <br>
 
 <img width="785" alt="image-9" src="https://github.com/user-attachments/assets/77448545-7969-407c-a36e-afd4d40c6365" />
+
+
+<br><br>
+
+## Ⅲ. SSH Key 인증 오류 🚀
+
+### ❌ 문제 발생
+
+```
++ scp /var/lib/jenkins/workspace/auto-pipe01/step07_cicd/build/libs/step07_cicd-0.0.1-SNAPSHOT.jar ubuntu@192.168.0.21:/home/ubuntu/jarappdir
+Host key verification failed.
+scp: Connection closed
+```
+
+Jenkins에서 빌드된 JAR 파일을 scp 명령어를 이용해 **192.168.0.21 서버**에 전송하려 했으나, **Host key verification failed** 오류 발생
+
+---
+
+## ❌ 오류 메시지
+
+```
++ scp -i /home/ubuntu/.ssh/id_rsa /var/lib/jenkins/workspace/auto-pipe01/step07_cicd/build/libs/step07_cicd-0.0.1-SNAPSHOT.jar ubuntu@192.168.0.21:/home/ubuntu/jarappdir
+Warning: Identity file /home/ubuntu/.ssh/id_rsa not accessible: Permission denied.
+Host key verification failed.
+scp: Connection closed
+```
+
+`/home/ubuntu/.ssh/id_rsa` private key를 ssh 인증에 사용하도록 지정했으나 **Host key verification failed** 오류와 **Permission denied** 오류 발생
+<br><br>
+
+![usermod_jenkins](https://github.com/user-attachments/assets/83e17a07-504f-4db0-8062-3aa1d0fbcfe0)
+
+```
+chmod 777 .ssh
+chmod 777 id_rsa
+```
+
+`id_rsa` 파일의 소유자는 `ubuntu`이다. `id_rsa` 파일에 `jenkins` 유저가 접근할 수 있도록 `ubuntu` 그룹에 유저 `jenkins`를 추가하고 `.ssh` 폴더와 `id_rsa` 파일의 권한을 변경했지만 여전히 같은 오류가 발생했다.
+
+---
+
+## ✅ 해결 방법
+
+
+1️⃣ Jenkins에서 CI/CD 자동화로 실행할 때 유저는 `jenkins`로 동작하므로, `/home/ubuntu/.ssh` 하위의 파일이 아닌 `/var/lib/jenkins/.ssh` 하위의 파일을 사용해 ssh 접속을 시도한다.
+<br><br>
+![jenkins_key](https://github.com/user-attachments/assets/de07aa6d-31e2-49fd-ba3d-dff28611ab3a)
+<br><br>
+2️⃣ `jenkins` 유저로 로그인한 후 ssh key를 생성하면 `/var/lib/jenkins/.ssh` 폴더에 소유자가 `jenkins`인 public key와 private key가 생성된다.
+<br><br>
+![jenkins_copykey](https://github.com/user-attachments/assets/6371245d-2505-43ad-8fb1-f14d4d884ca0)
+<br><br>
+3️⃣ 192.168.0.21 `ubuntu` 서버의 authorized_keys 파일에 public key를 등록한 이후로는 비밀번호 없이 ssh 접속이 가능하다.
+<br>
+
+---
+
+## 🎯 최종 결과
+
+✅ **Jenkins가 `scp` 명령어를 사용하여 정상적으로 JAR 파일을 원격 ubuntu 서버의  `/home/ubuntu/jarappdir/` 에 저장할 수 있음!** 🚀
+
+
+
+
