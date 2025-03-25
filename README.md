@@ -63,7 +63,7 @@ https://ngrok.com/
 <br>
 
 ### 3. jenkins-github 연동 확인
-**1. jenkins 접속하여 Dashboard → 새로운 item**
+**1. jenkins 접속하여 Dashboard → 새로운 item** <br>
 **2. Pipeline 선택**
 ![Image](https://github.com/user-attachments/assets/a2a7119e-65ba-4baf-aca6-db03b611c145)
 
